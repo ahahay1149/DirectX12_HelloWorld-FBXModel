@@ -38,6 +38,9 @@ void InitWindow(const TCHAR* appName)
 	wc.lpszClassName = appName;
 	wc.hIconSm = LoadIcon(g_hInst, IDI_APPLICATION);
 
+	//ウィンドウクラスの登録
+	RegisterClassEx(&wc);
+
 	//ウィンドウサイズの設定
 	RECT rect = {};
 	rect.right = static_cast<LONG>(WINDOW_WIDTH);
@@ -84,7 +87,10 @@ void MainLoop()
 		}
 		else
 		{
-			//後で描画処理を行う。
+			//後でこの行で更新処理を行う
+			g_Engine->BeginRender();
+			//後でこの行で3Dオブジェクトの描画処理を行う
+			g_Engine->EndRender();
 		}
 	}
 }

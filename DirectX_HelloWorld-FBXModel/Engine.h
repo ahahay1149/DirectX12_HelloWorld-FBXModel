@@ -45,7 +45,7 @@ private:
 	ComPtr<ID3D12GraphicsCommandList> m_pCommandList = nullptr; //コマンドリスト
 	HANDLE m_fenceEvent = nullptr;					//フェンスで使うイベント
 	ComPtr<ID3D12Fence> m_pFence = nullptr;			//フェンス
-	UINT64 m_fenceValue[FRAME_BUFFER_COUNT];		//フェンスの値 
+	UINT64 m_fenceValue[FRAME_BUFFER_COUNT];		//フェンスの値
 	D3D12_VIEWPORT m_Viewport;						//ビューポート
 	D3D12_RECT m_Scissor;							//シザー矩形
 
@@ -66,4 +66,4 @@ private: //描画ループで使用するもの
 	void WaitRender();
 };
 
-extern Engine* g_Engine;
+extern Engine* g_Engine;	//どこからでも参照したいのでグローバルにする。
