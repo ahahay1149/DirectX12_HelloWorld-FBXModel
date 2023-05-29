@@ -26,7 +26,7 @@ void InitWindow(const TCHAR* appName)
 		return;
 	}
 
-	//ウィンドウの設定
+	// ウィンドウの設定
 	WNDCLASSEX wc = {};
 	wc.cbSize = sizeof(WNDCLASSEX);
 	wc.style = CS_HREDRAW | CS_VREDRAW;
@@ -38,19 +38,19 @@ void InitWindow(const TCHAR* appName)
 	wc.lpszClassName = appName;
 	wc.hIconSm = LoadIcon(g_hInst, IDI_APPLICATION);
 
-	//ウィンドウクラスの登録
+	// ウィンドウクラスの登録。
 	RegisterClassEx(&wc);
 
-	//ウィンドウサイズの設定
+	// ウィンドウサイズの設定
 	RECT rect = {};
 	rect.right = static_cast<LONG>(WINDOW_WIDTH);
 	rect.bottom = static_cast<LONG>(WINDOW_HEIGHT);
 
-	//ウィンドウサイズを調整
+	// ウィンドウサイズを調整
 	auto style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU;
 	AdjustWindowRect(&rect, style, FALSE);
 
-	//ウィンドウの生成
+	// ウィンドウの生成
 	g_hWnd = CreateWindowEx(
 		0,
 		appName,
@@ -66,12 +66,10 @@ void InitWindow(const TCHAR* appName)
 		nullptr
 	);
 
-
-
-	//ウィンドウを表示
+	// ウィンドウを表示
 	ShowWindow(g_hWnd, SW_SHOWNORMAL);
 
-	//ウィンドウにフォーカスする
+	// ウィンドウにフォーカスする
 	SetFocus(g_hWnd);
 }
 
@@ -87,9 +85,10 @@ void MainLoop()
 		}
 		else
 		{
-			//後でこの行で更新処理を行う
+			// 後で描画処理を実行するところ
+			// 後でこの行で更新処理を行う
 			g_Engine->BeginRender();
-			//後でこの行で3Dオブジェクトの描画処理を行う
+			// 後でこの行で3Dオブジェクトのの描画処理を行う
 			g_Engine->EndRender();
 		}
 	}
@@ -97,18 +96,16 @@ void MainLoop()
 
 void StartApp(const TCHAR* appName)
 {
-	//ウィンドウ生成
+	// ウィンドウ生成
 	InitWindow(appName);
 
-	//描画エンジンの初期化
+	// 後でここで描画基盤や3Dモデルの初期化を行う
 	g_Engine = new Engine();
 	if (!g_Engine->Init(g_hWnd, WINDOW_WIDTH, WINDOW_HEIGHT))
 	{
 		return;
 	}
 
-	//後ここで描画基盤や3Dモデルの初期化を行う
-
-	//メイン処理ループ
+	// メイン処理ループ
 	MainLoop();
 }
