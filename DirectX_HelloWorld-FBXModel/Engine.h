@@ -41,7 +41,7 @@ private: // 描画に使うDirectX12のオブジェクトたち
 	ComPtr<ID3D12Device6> m_pDevice = nullptr; // デバイス
 	ComPtr<ID3D12CommandQueue> m_pQueue = nullptr; // コマンドキュー
 	ComPtr<IDXGISwapChain3> m_pSwapChain = nullptr; // スワップチェイン
-	ComPtr<ID3D12CommandAllocator> m_pAllocator[FRAME_BUFFER_COUNT] = { nullptr }; // コマンドアロケーたー
+	ComPtr<ID3D12CommandAllocator> m_pAllocator[FRAME_BUFFER_COUNT] = { nullptr }; // コマンドアロケーター
 	ComPtr<ID3D12GraphicsCommandList> m_pCommandList = nullptr; // コマンドリスト
 	HANDLE m_fenceEvent = nullptr; // フェンスで使うイベント
 	ComPtr<ID3D12Fence> m_pFence = nullptr; // フェンス
