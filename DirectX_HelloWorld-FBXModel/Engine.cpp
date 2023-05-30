@@ -381,3 +381,18 @@ void Engine::EndRender()
 	// バックバッファ番号更新
 	m_CurrentBackBufferIndex = m_pSwapChain->GetCurrentBackBufferIndex();
 }
+
+ID3D12Device6* Engine::Device()
+{
+	return m_pDevice.Get();
+}
+
+ID3D12GraphicsCommandList* Engine::CommandList()
+{
+	return m_pCommandList.Get();
+}
+
+UINT Engine::CurrentBackBufferIndex()
+{
+	return m_CurrentBackBufferIndex;
+}
