@@ -11,7 +11,7 @@ struct Vertex;
 struct aiMesh;
 struct aiMaterial;
 
-struct ImportSettings
+struct ImportSettings	//インポートするときのパラメータ
 {
 	const wchar_t* filename = nullptr;
 	std::vector<Mesh>& meshes;

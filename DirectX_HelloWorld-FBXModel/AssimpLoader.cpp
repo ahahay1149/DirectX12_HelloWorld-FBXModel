@@ -88,7 +88,7 @@ bool AssimpLoader::Load(ImportSettings settings)
 
 	scene = nullptr;
 
-	return false;
+	return true;
 }
 
 void AssimpLoader::LoadMesh(Mesh& dst, const aiMesh* src, bool inverseU, bool inverseV)
@@ -122,6 +122,8 @@ void AssimpLoader::LoadMesh(Mesh& dst, const aiMesh* src, bool inverseU, bool in
 		vertex.UV = DirectX::XMFLOAT2(uv->x, uv->y);
 		vertex.Tangent = DirectX::XMFLOAT3(tangent->x, tangent->y, tangent->z);
 		vertex.Color = DirectX::XMFLOAT4(color->r, color->g, color->b, color->a);
+
+		dst.Vertices[i] = vertex;
 	}
 
 	dst.Indices.resize(src->mNumFaces * 3);
