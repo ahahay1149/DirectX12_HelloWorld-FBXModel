@@ -5,11 +5,8 @@ struct VSOutput
 	float2 uv : TEXCOORD;		//頂点シェーダから来たUV
 };
 
-SamplerState smp : register(s0);	//サンプラー
-Texture2D _MainTex : register(t0);	//テクスチャ
-
 float4 pixel(VSOutput input) : SV_TARGET
 {
 	//return input.color;	//色をそのまま表示する
-	return _MainTex.Sample(smp, input.uv);
+	return float4(input.uv.xy, 1, 1);
 }
