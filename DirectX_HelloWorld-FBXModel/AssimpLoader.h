@@ -14,7 +14,7 @@ struct aiMaterial;
 struct ImportSettings	//インポートするときのパラメータ
 {
 	const wchar_t* filename = nullptr;
-	std::vector<Mesh>& meshes;
+	std::vector<Mesh> &meshes;	//出力先のメッシュ配列
 	bool inverseU = false;	//U座標を反転させるか
 	bool inverseV = false;	//V座標を反転させるか
 };

@@ -27,8 +27,22 @@ std::vector<Mesh> meshes;
 std::vector<VertexBuffer*> vertexBuffers;	//メッシュの数分の頂点バッファ
 std::vector<IndexBuffer*> indexBuffers;		//メッシュの数分のインデックスバッファ
 
+// 拡張子を置き換える処理
+#include <filesystem>
+namespace fs = std::filesystem;
+std::wstring ReplaceExtension(const std::wstring& origin, const char* ext)
+{
+	fs::path p = origin.c_str();
+	return p.replace_extension(ext).c_str();
+}
+
+DescriptorHeap* descriptorHeap;
+std::vector<DescriptorHandle*> materialHandles = {}; // テクスチャ用のハンドル一覧
+
 bool Scene::Init()
 {
+	descriptorHeap = new DescriptorHeap();
+
 	//----アリシア・モデル読み込み処理----//
 	ImportSettings importSettings = //これ自体は自作の読み込み設定構造体
 	{
@@ -100,6 +114,17 @@ bool Scene::Init()
 		ptr->Proj = XMMatrixPerspectiveFovRH(fov, aspect, 0.3f, 1000.0f);
 	}
 
+	// マテリアルの読み込み
+	materialHandles.clear();
+
+	for (size_t i = 0; i < meshes.size(); i++)
+	{
+		auto texPath = ReplaceExtension(meshes[i].DiffuseMap, "tga"); // もともとはpsdになっていてちょっとめんどかったので、同梱されているtgaを読み込む
+		auto mainTex = Texture2D::Get(texPath);
+		auto handle = descriptorHeap->Register(mainTex);
+		materialHandles.push_back(handle);
+	}
+
 	rootSignature = new RootSignature();
 	if (!rootSignature->IsValid())
 	{
@@ -136,6 +161,7 @@ void Scene::Draw()
 {
 	auto currentIndex = g_Engine->CurrentBackBufferIndex();	//現在のフレーム番号を取得する
 	auto commandList = g_Engine->CommandList();				//コマンドリスト
+	auto materialHeap = descriptorHeap->GetHeap();			//ディスクリプタヒープ
 
 	for (size_t i = 0; i < meshes.size(); i++)
 	{
@@ -149,6 +175,9 @@ void Scene::Draw()
 		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);	//三角形を描画する設定にする
 		commandList->IASetVertexBuffers(0, 1, &vbView);	//頂点バッファをスロット0番を使って1個だけ設定する
 		commandList->IASetIndexBuffer(&ibView);	//インデックスバッファをセットする
+
+		commandList->SetDescriptorHeaps(1, &materialHeap); // 使用するディスクリプタヒープをセット
+		commandList->SetGraphicsRootDescriptorTable(1, materialHandles[i]->HandleGPU); // そのメッシュに対応するディスクリプタテーブルをセット
 
 		commandList->DrawIndexedInstanced(meshes[i].Indices.size(), 1, 0, 0, 0);	//インデックスの数分描画する
 	}
